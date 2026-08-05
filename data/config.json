@@ -1,0 +1,22 @@
+{
+  "telegram": {
+    "token": "7833520558:AAHO8cBmbsxQpJwZFTFNWCAL15n8lIzV8xQ",
+    "chatId": "6349562246"
+  },
+  "payment": {
+    "autoConfirm": false,
+    "methods": {
+      "DANA": "0895392249321",
+      "GOPAY": "0895392249321",
+      "QRIS": "https://cdn.phototourl.com/member/2026-08-05-52e461e8-1db0-4b9a-9657-bd4dc5db96fd.jpg",
+      "OVO": "tidak ada",
+      "SeaBank": "9016123456789012",
+      "Mandiri": "131-00-1234567-8",
+      "BCA": "0123456789"
+    }
+  },
+  "receipt": {
+    "title": "Struk Pembayaran Gustaf Hosting",
+    "footer": "Terima kasih, konfirmasi akan segera diproses oleh tim kami."
+  }
+}
