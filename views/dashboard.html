@@ -3,134 +3,204 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Admin - Gustaf Hosting</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Dashboard · Gustaf Hosting</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #f0f2f5;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f0f2f5; min-height: 100vh; }
+
+    #loginPage {
       display: flex;
+      justify-content: center;
+      align-items: center;
       min-height: 100vh;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      padding: 20px;
     }
-    .sidebar {
-      width: 260px;
-      background: #1a1a2e;
-      color: #fff;
-      padding: 20px 0;
-      position: fixed;
-      height: 100vh;
-      overflow-y: auto;
+    .login-box {
+      background: #fff;
+      padding: 40px 36px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
     }
-    .sidebar-brand {
-      padding: 0 20px 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      margin-bottom: 20px;
-    }
-    .sidebar-brand h2 {
-      font-size: 18px;
-      font-weight: 700;
-    }
-    .sidebar-brand small {
-      font-size: 12px;
-      opacity: 0.7;
-    }
-    .sidebar-menu {
-      list-style: none;
-      padding: 0 12px;
-    }
-    .sidebar-menu li {
+    .login-box .logo { text-align: center; margin-bottom: 28px; }
+    .login-box .logo h1 { font-size: 28px; font-weight: 800; }
+    .login-box .logo h1 span { color: #4a6cf7; }
+    .login-box .logo p { color: #6b7280; font-size: 14px; margin-top: 4px; }
+    .login-box .form-group { margin-bottom: 16px; }
+    .login-box .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
       margin-bottom: 4px;
     }
-    .sidebar-menu a {
+    .login-box .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 14px;
+      transition: all 0.3s;
+      background: #f9fafb;
+    }
+    .login-box .form-group input:focus {
+      outline: none;
+      border-color: #4a6cf7;
+      box-shadow: 0 0 0 4px rgba(74,108,247,0.1);
+      background: #fff;
+    }
+    .login-box .btn-login {
+      width: 100%;
+      padding: 14px;
+      background: #4a6cf7;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .login-box .btn-login:hover { background: #3a5de7; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(74,108,247,0.4); }
+    .login-box .btn-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .login-box .error-msg { color: #ef4444; font-size: 13px; margin-top: 10px; text-align: center; display: none; }
+    .login-box .error-msg.show { display: block; }
+
+    #dashboardApp { display: none; }
+    #dashboardApp.active { display: block; }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 260px;
+      height: 100vh;
+      background: #1a1a2e;
+      padding: 24px 16px;
+      overflow-y: auto;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+    .sidebar .brand { padding: 0 8px 24px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 20px; }
+    .sidebar .brand h2 { color: #fff; font-size: 22px; font-weight: 800; }
+    .sidebar .brand h2 span { color: #4a6cf7; }
+    .sidebar .brand p { color: rgba(255,255,255,0.4); font-size: 12px; margin-top: 2px; }
+    .sidebar .menu { list-style: none; }
+    .sidebar .menu li { margin-bottom: 4px; }
+    .sidebar .menu a {
       display: flex;
       align-items: center;
-      padding: 12px 16px;
-      color: rgba(255,255,255,0.7);
-      text-decoration: none;
-      border-radius: 8px;
-      transition: all 0.3s;
-      font-size: 14px;
       gap: 12px;
+      padding: 12px 14px;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s;
     }
-    .sidebar-menu a:hover, .sidebar-menu a.active {
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-    }
-    .sidebar-menu a i {
-      width: 20px;
-      text-align: center;
-    }
+    .sidebar .menu a:hover { background: rgba(255,255,255,0.06); color: #fff; }
+    .sidebar .menu a.active { background: rgba(74,108,247,0.2); color: #fff; }
+    .sidebar .menu a i { width: 20px; text-align: center; font-size: 16px; }
+    .sidebar .menu .logout { margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .sidebar .menu .logout a { color: #ef4444; }
+    .sidebar .menu .logout a:hover { background: rgba(239,68,68,0.15); }
+
     .main {
       margin-left: 260px;
-      padding: 30px;
-      flex: 1;
+      padding: 28px 32px;
+      min-height: 100vh;
     }
-    .page-header {
-      margin-bottom: 30px;
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 12px;
     }
-    .page-header h1 {
-      font-size: 24px;
-      font-weight: 700;
-    }
-    .page-header p {
-      color: #666;
-      font-size: 14px;
-    }
-    .card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    .card-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 16px;
+    .main-header h1 { font-size: 24px; font-weight: 800; color: #1a1a2e; }
+    .main-header p { color: #6b7280; font-size: 14px; margin-top: 2px; }
+    .main-header .user {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      background: #fff;
+      padding: 8px 16px 8px 12px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
-    .card-title i {
-      color: #4a6cf7;
+    .main-header .user i { color: #4a6cf7; font-size: 20px; }
+    .main-header .user span { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      transition: box-shadow 0.3s;
     }
-    .form-group {
+    .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a2e;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       margin-bottom: 16px;
     }
+    .card-title i { color: #4a6cf7; font-size: 18px; }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .stat-item { padding: 12px 16px; background: #f8fafc; border-radius: 12px; }
+    .stat-item .label { font-size: 12px; color: #6b7280; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-item .value { font-size: 20px; font-weight: 700; color: #1a1a2e; margin-top: 4px; }
+
+    .form-group { margin-bottom: 14px; }
     .form-group label {
       display: block;
       font-size: 13px;
-      font-weight: 500;
-      color: #333;
+      font-weight: 600;
+      color: #374151;
       margin-bottom: 4px;
     }
-    .form-group input, .form-group select {
+    .form-group input,
+    .form-group select {
       width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
+      padding: 10px 14px;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
       font-size: 14px;
-      transition: border 0.3s;
+      transition: all 0.3s;
+      background: #f9fafb;
+      font-family: inherit;
     }
-    .form-group input:focus, .form-group select:focus {
+    .form-group input:focus,
+    .form-group select:focus {
       outline: none;
       border-color: #4a6cf7;
+      box-shadow: 0 0 0 4px rgba(74,108,247,0.1);
+      background: #fff;
     }
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
+
     .btn {
       padding: 10px 20px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
@@ -138,229 +208,259 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      font-family: inherit;
     }
-    .btn-primary {
-      background: #4a6cf7;
-      color: #fff;
-    }
-    .btn-primary:hover {
-      background: #3a5de7;
-    }
-    .btn-success {
-      background: #22c55e;
-      color: #fff;
-    }
-    .btn-success:hover {
-      background: #16a34a;
-    }
-    .btn-danger {
-      background: #ef4444;
-      color: #fff;
-    }
-    .btn-danger:hover {
-      background: #dc2626;
-    }
-    .btn-warning {
-      background: #f59e0b;
-      color: #fff;
-    }
-    .btn-warning:hover {
-      background: #d97706;
-    }
-    .btn-sm {
-      padding: 6px 12px;
-      font-size: 12px;
-    }
+    .btn-primary { background: #4a6cf7; color: #fff; }
+    .btn-primary:hover { background: #3a5de7; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(74,108,247,0.3); }
+    .btn-success { background: #22c55e; color: #fff; }
+    .btn-success:hover { background: #16a34a; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(34,197,94,0.3); }
+    .btn-danger { background: #ef4444; color: #fff; }
+    .btn-danger:hover { background: #dc2626; transform: translateY(-2px); }
+    .btn-sm { padding: 6px 14px; font-size: 12px; }
+
     .toggle {
       position: relative;
-      width: 50px;
-      height: 28px;
-      background: #ccc;
-      border-radius: 14px;
+      width: 48px;
+      height: 26px;
+      background: #d1d5db;
+      border-radius: 13px;
       cursor: pointer;
       transition: 0.3s;
-      display: inline-block;
+      flex-shrink: 0;
     }
-    .toggle.active {
-      background: #22c55e;
-    }
+    .toggle.active { background: #22c55e; }
     .toggle::after {
       content: '';
       position: absolute;
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       background: #fff;
       border-radius: 50%;
       top: 3px;
       left: 3px;
       transition: 0.3s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
     }
-    .toggle.active::after {
-      left: 25px;
-    }
+    .toggle.active::after { left: 25px; }
     .toggle-container {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
+      flex-wrap: wrap;
     }
-    .toggle-label {
-      font-size: 14px;
-      font-weight: 500;
-    }
+
     .badge {
-      padding: 4px 10px;
+      padding: 4px 12px;
       border-radius: 20px;
       font-size: 12px;
       font-weight: 600;
+      display: inline-block;
     }
-    .badge-success {
-      background: #dcfce7;
-      color: #16a34a;
-    }
-    .badge-warning {
-      background: #fef3c7;
-      color: #d97706;
-    }
+    .badge-success { background: #dcfce7; color: #16a34a; }
+    .badge-warning { background: #fef3c7; color: #d97706; }
+    .badge-danger { background: #fee2e2; color: #dc2626; }
+
     .method-list {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 10px;
     }
     .method-item {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       padding: 10px 14px;
       background: #f8fafc;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      flex-wrap: wrap;
     }
     .method-item .name {
       font-weight: 600;
       font-size: 13px;
-      min-width: 70px;
+      min-width: 60px;
+      color: #1a1a2e;
     }
     .method-item input {
       flex: 1;
       padding: 6px 10px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
       font-size: 13px;
+      min-width: 80px;
+      background: #fff;
     }
-    .method-item .btn-save {
-      padding: 4px 12px;
-      font-size: 12px;
-    }
-    .hidden {
-      display: none !important;
-    }
+    .method-item input:focus { outline: none; border-color: #4a6cf7; }
+
     .alert {
       padding: 12px 16px;
-      border-radius: 8px;
+      border-radius: 10px;
       margin-bottom: 16px;
       font-size: 14px;
+      display: none;
     }
-    .alert-success {
-      background: #dcfce7;
-      color: #16a34a;
-      border: 1px solid #86efac;
-    }
-    .alert-danger {
-      background: #fee2e2;
-      color: #dc2626;
-      border: 1px solid #fca5a5;
-    }
+    .alert.show { display: block; }
+    .alert-success { background: #dcfce7; color: #16a34a; border: 1px solid #86efac; }
+    .alert-danger { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
+    .alert-info { background: #dbeafe; color: #2563eb; border: 1px solid #93c5fd; }
+
     #currentQris {
-      max-width: 200px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 8px;
-      margin-top: 8px;
+      max-width: 140px;
+      border-radius: 10px;
+      border: 2px solid #e5e7eb;
+      padding: 6px;
+      margin-top: 10px;
+      display: none;
+      background: #fff;
+    }
+    .hidden { display: none !important; }
+
+    @media (max-width: 992px) {
+      .method-list { grid-template-columns: 1fr; }
     }
     @media (max-width: 768px) {
-      .sidebar {
-        width: 60px;
-        padding: 10px 0;
+      .sidebar { transform: translateX(-100%); width: 280px; }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; padding: 16px; }
+      .form-row { grid-template-columns: 1fr; }
+      .main-header { flex-direction: column; align-items: flex-start; }
+      .main-header .user { width: 100%; justify-content: center; }
+      .hamburger {
+        display: flex !important;
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        z-index: 200;
+        background: #1a1a2e;
+        color: #fff;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-size: 18px;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       }
-      .sidebar-brand h2, .sidebar-brand small, .sidebar-menu a span {
+      .sidebar-overlay {
         display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 99;
       }
-      .sidebar-menu a {
-        justify-content: center;
-        padding: 12px;
-      }
-      .main {
-        margin-left: 60px;
-        padding: 16px;
-      }
-      .form-row, .method-list {
-        grid-template-columns: 1fr;
-      }
+      .sidebar-overlay.active { display: block; }
     }
+    .hamburger { display: none; }
+
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
   </style>
 </head>
 <body>
-  <nav class="sidebar">
-    <div class="sidebar-brand">
-      <h2>⚡ Gustaf</h2>
-      <small>Admin Dashboard</small>
+
+<button class="hamburger" id="hamburger" onclick="toggleSidebar()">
+  <i class="fas fa-bars"></i>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- LOGIN -->
+<div id="loginPage">
+  <div class="login-box">
+    <div class="logo">
+      <h1>⚡ <span>Gustaf</span>Hosting</h1>
+      <p>Admin Dashboard</p>
     </div>
-    <ul class="sidebar-menu">
-      <li><a href="#" class="active" data-page="dashboard"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
-      <li><a href="#" data-page="payment"><i class="fas fa-credit-card"></i> <span>Payment Methods</span></a></li>
-      <li><a href="#" data-page="qris"><i class="fas fa-qrcode"></i> <span>QRIS Settings</span></a></li>
-      <li><a href="#" data-page="receipt"><i class="fas fa-receipt"></i> <span>Receipt Settings</span></a></li>
-      <li><a href="#" data-page="telegram"><i class="fab fa-telegram"></i> <span>Telegram</span></a></li>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label><i class="fas fa-user"></i> Username</label>
+        <input type="text" id="loginUsername" placeholder="Masukkan username" required>
+      </div>
+      <div class="form-group">
+        <label><i class="fas fa-lock"></i> Password</label>
+        <input type="password" id="loginPassword" placeholder="Masukkan password" required>
+      </div>
+      <button type="submit" class="btn-login" id="loginBtn">
+        <i class="fas fa-sign-in-alt"></i> Login
+      </button>
+      <div class="error-msg" id="loginError">❌ Username atau password salah!</div>
+    </form>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboardApp">
+  <nav class="sidebar" id="sidebar">
+    <div class="brand">
+      <h2>⚡ <span>Gustaf</span></h2>
+      <p>Admin Dashboard</p>
+    </div>
+    <ul class="menu">
+      <li><a href="#" class="active" data-page="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="#" data-page="payment"><i class="fas fa-credit-card"></i> Payment Methods</a></li>
+      <li><a href="#" data-page="qris"><i class="fas fa-qrcode"></i> QRIS Settings</a></li>
+      <li><a href="#" data-page="telegram"><i class="fab fa-telegram"></i> Telegram</a></li>
+      <li class="logout"><a href="#" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
     </ul>
   </nav>
 
   <div class="main">
-    <div class="page-header">
-      <h1 id="pageTitle">Dashboard</h1>
-      <p id="pageDesc">Kelola konfigurasi payment system</p>
+    <div class="main-header">
+      <div>
+        <h1 id="pageTitle">Dashboard</h1>
+        <p id="pageDesc">Kelola konfigurasi payment system</p>
+      </div>
+      <div class="user">
+        <i class="fas fa-user-circle"></i>
+        <span id="currentUser">Admin</span>
+      </div>
     </div>
 
     <div id="alertContainer"></div>
 
-    <!-- Dashboard -->
     <div id="page-dashboard">
       <div class="card">
-        <div class="card-title"><i class="fas fa-info-circle"></i> Status Sistem</div>
-        <div class="form-row">
-          <div>
-            <p><strong>Mode Konfirmasi:</strong> <span id="statusMode" class="badge badge-warning">⏳ Manual</span></p>
-            <p><strong>Bot Telegram:</strong> <span id="statusBot" class="badge badge-success">✅ Terhubung</span></p>
+        <div class="card-title"><i class="fas fa-chart-pie"></i> Ringkasan</div>
+        <div class="card-grid">
+          <div class="stat-item">
+            <div class="label">Mode Konfirmasi</div>
+            <div class="value"><span id="statusMode" class="badge badge-warning">⏳ Manual</span></div>
           </div>
-          <div>
-            <p><strong>Total Metode:</strong> <span id="totalMethods">0</span></p>
-            <p><strong>QRIS:</strong> <span id="qrisStatus">Belum diupload</span></p>
+          <div class="stat-item">
+            <div class="label">Total Metode</div>
+            <div class="value"><span id="totalMethods">0</span></div>
+          </div>
+          <div class="stat-item">
+            <div class="label">QRIS</div>
+            <div class="value"><span id="qrisStatus" class="badge badge-danger">❌ Belum</span></div>
+          </div>
+          <div class="stat-item">
+            <div class="label">Bot Telegram</div>
+            <div class="value"><span class="badge badge-success">✅ Terhubung</span></div>
           </div>
         </div>
       </div>
+
       <div class="card">
         <div class="card-title"><i class="fas fa-cog"></i> Auto Confirm</div>
         <div class="toggle-container">
-          <span class="toggle-label">Otomatis konfirmasi pembayaran:</span>
+          <span style="font-weight:500;">Otomatis konfirmasi pembayaran:</span>
           <div class="toggle" id="autoToggle" onclick="toggleAutoConfirm()"></div>
-          <span id="autoLabel" style="font-size:13px;color:#666;">Nonaktif</span>
+          <span id="autoLabel" style="font-size:13px;color:#6b7280;">Nonaktif</span>
         </div>
-        <p style="font-size:13px;color:#888;margin-top:8px;">
-          Jika aktif, semua pembayaran akan otomatis dikonfirmasi tanpa perlu admin verifikasi.
+        <p style="font-size:13px;color:#6b7280;margin-top:10px;">
+          Jika aktif, semua pembayaran otomatis dikonfirmasi tanpa verifikasi admin.
         </p>
       </div>
     </div>
 
-    <!-- Payment Methods -->
     <div id="page-payment" class="hidden">
       <div class="card">
         <div class="card-title"><i class="fas fa-wallet"></i> Metode Pembayaran</div>
-        <p style="font-size:13px;color:#888;margin-bottom:16px;">Ubah nomor rekening / e-wallet untuk setiap metode</p>
+        <p style="font-size:13px;color:#6b7280;margin-bottom:16px;">Ubah nomor rekening / e-wallet untuk setiap metode</p>
         <div class="method-list" id="methodList"></div>
       </div>
     </div>
 
-    <!-- QRIS Settings -->
     <div id="page-qris" class="hidden">
       <div class="card">
         <div class="card-title"><i class="fas fa-qrcode"></i> QRIS Settings</div>
@@ -372,29 +472,12 @@
           <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i> Upload QRIS</button>
         </form>
         <div style="margin-top:16px;">
-          <p><strong>QRIS Saat Ini:</strong></p>
+          <p style="font-weight:600;font-size:14px;">QRIS Saat Ini:</p>
           <img id="currentQris" src="" alt="QRIS">
         </div>
       </div>
     </div>
 
-    <!-- Receipt Settings -->
-    <div id="page-receipt" class="hidden">
-      <div class="card">
-        <div class="card-title"><i class="fas fa-receipt"></i> Setting Struk</div>
-        <div class="form-group">
-          <label>Judul Struk</label>
-          <input type="text" id="receiptTitle" placeholder="Struk Pembayaran Gustaf Hosting">
-        </div>
-        <div class="form-group">
-          <label>Footer Struk</label>
-          <input type="text" id="receiptFooter" placeholder="Terima kasih, konfirmasi akan segera diproses">
-        </div>
-        <button class="btn btn-success" onclick="saveReceiptSettings()"><i class="fas fa-save"></i> Simpan Setting</button>
-      </div>
-    </div>
-
-    <!-- Telegram Settings -->
     <div id="page-telegram" class="hidden">
       <div class="card">
         <div class="card-title"><i class="fab fa-telegram"></i> Konfigurasi Telegram</div>
@@ -406,258 +489,295 @@
           <label>Chat ID</label>
           <input type="text" id="chatId" placeholder="Masukkan chat ID">
         </div>
-        <button class="btn btn-success" onclick="saveTelegramSettings()"><i class="fas fa-save"></i> Simpan</button>
+        <button class="btn btn-success" onclick="saveTelegram()"><i class="fas fa-save"></i> Simpan</button>
         <button class="btn btn-primary" onclick="testTelegram()" style="margin-left:8px;"><i class="fas fa-paper-plane"></i> Test Kirim</button>
       </div>
     </div>
   </div>
+</div>
 
-  <script>
-    let config = {};
+<script>
+  let config = {};
 
-    async function loadConfig() {
-      try {
-        const res = await fetch('/api/config');
-        config = await res.json();
-        renderAll();
-      } catch (error) {
-        console.error('Error loading config:', error);
-        showAlert('Gagal memuat konfigurasi', 'danger');
-      }
-    }
+  function handleLogin(e) {
+    e.preventDefault();
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
+    const btn = document.getElementById('loginBtn');
+    const errorEl = document.getElementById('loginError');
 
-    function renderAll() {
-      renderDashboard();
-      renderMethods();
-      renderQris();
-      renderReceipt();
-      renderTelegram();
-      renderAutoToggle();
-    }
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+    errorEl.classList.remove('show');
 
-    function renderDashboard() {
-      const methods = Object.keys(config.payment?.methods || {}).length;
-      document.getElementById('totalMethods').textContent = methods;
-      
-      const auto = config.payment?.autoConfirm || false;
-      document.getElementById('statusMode').textContent = auto ? '✅ Otomatis' : '⏳ Manual';
-      document.getElementById('statusMode').className = auto ? 'badge badge-success' : 'badge badge-warning';
-      
-      const qris = config.payment?.methods?.QRIS || '';
-      document.getElementById('qrisStatus').textContent = qris && qris !== 'tidak ada' ? '✅ Terupload' : '❌ Belum';
-    }
-
-    function renderAutoToggle() {
-      const auto = config.payment?.autoConfirm || false;
-      const toggle = document.getElementById('autoToggle');
-      const label = document.getElementById('autoLabel');
-      if (auto) {
-        toggle.classList.add('active');
-        label.textContent = 'Aktif';
+    fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('dashboardApp').classList.add('active');
+        loadConfig();
       } else {
-        toggle.classList.remove('active');
-        label.textContent = 'Nonaktif';
+        errorEl.textContent = '❌ ' + (data.error || 'Username atau password salah!');
+        errorEl.classList.add('show');
       }
-    }
+    })
+    .catch(() => {
+      errorEl.textContent = '❌ Terjadi kesalahan, coba lagi!';
+      errorEl.classList.add('show');
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+    });
+  }
 
-    async function toggleAutoConfirm() {
-      const auto = !config.payment?.autoConfirm;
-      try {
-        const res = await fetch('/api/payment/auto-confirm', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ enabled: auto })
-        });
-        const data = await res.json();
-        if (data.success) {
-          config.payment.autoConfirm = data.autoConfirm;
-          renderAutoToggle();
-          renderDashboard();
-          showAlert(`Auto confirm ${data.autoConfirm ? 'diaktifkan' : 'dinonaktifkan'}`, 'success');
-        }
-      } catch (error) {
-        showAlert('Gagal mengubah setting', 'danger');
-      }
+  function handleLogout() {
+    if (confirm('Yakin ingin logout?')) {
+      document.getElementById('loginPage').style.display = 'flex';
+      document.getElementById('dashboardApp').classList.remove('active');
+      document.getElementById('loginUsername').value = '';
+      document.getElementById('loginPassword').value = '';
+      document.getElementById('loginError').classList.remove('show');
     }
+  }
 
-    function renderMethods() {
-      const container = document.getElementById('methodList');
-      const methods = config.payment?.methods || {};
-      let html = '';
-      for (const [key, value] of Object.entries(methods)) {
-        const isQris = key === 'QRIS';
-        html += `
-          <div class="method-item">
-            <span class="name">${key}</span>
-            <input type="text" id="method_${key}" value="${value}" ${isQris ? 'readonly' : ''}>
-            ${!isQris ? `<button class="btn btn-primary btn-sm btn-save" onclick="saveMethod('${key}')"><i class="fas fa-save"></i></button>` : ''}
-          </div>
-        `;
-      }
-      container.innerHTML = html;
-    }
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('active');
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('active');
+  }
 
-    async function saveMethod(method) {
-      const input = document.getElementById(`method_${method}`);
-      const value = input.value.trim();
-      if (!value) {
-        showAlert('Nomor tidak boleh kosong', 'danger');
-        return;
-      }
-      try {
-        const res = await fetch('/api/payment/method', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ method, value })
-        });
-        const data = await res.json();
-        if (data.success) {
-          config = data.config;
-          showAlert(`${method} berhasil diupdate`, 'success');
-        }
-      } catch (error) {
-        showAlert('Gagal update method', 'danger');
-      }
-    }
-
-    function renderQris() {
-      const qris = config.payment?.methods?.QRIS || '';
-      const img = document.getElementById('currentQris');
-      if (qris && qris !== 'tidak ada') {
-        img.src = qris;
-        img.style.display = 'block';
-      } else {
-        img.style.display = 'none';
-      }
-    }
-
-    document.getElementById('qrisForm').addEventListener('submit', async function(e) {
+  document.querySelectorAll('.sidebar .menu a[data-page]').forEach(link => {
+    link.addEventListener('click', function(e) {
       e.preventDefault();
-      const formData = new FormData(this);
-      try {
-        const res = await fetch('/api/upload/qris', {
-          method: 'POST',
-          body: formData
-        });
-        const data = await res.json();
-        if (data.success) {
-          config.payment.methods.QRIS = data.url;
-          renderQris();
-          renderDashboard();
-          showAlert('QRIS berhasil diupload!', 'success');
-        }
-      } catch (error) {
-        showAlert('Gagal upload QRIS', 'danger');
-      }
+      document.querySelectorAll('.sidebar .menu a[data-page]').forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+
+      const page = this.dataset.page;
+      document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`page-${page}`).classList.remove('hidden');
+
+      const titles = {
+        dashboard: ['Dashboard', 'Kelola konfigurasi payment system'],
+        payment: ['Payment Methods', 'Ubah nomor rekening / e-wallet'],
+        qris: ['QRIS Settings', 'Upload dan kelola QRIS'],
+        telegram: ['Telegram Settings', 'Konfigurasi bot Telegram']
+      };
+      document.getElementById('pageTitle').textContent = titles[page][0];
+      document.getElementById('pageDesc').textContent = titles[page][1];
+
+      closeSidebar();
     });
+  });
 
-    function renderReceipt() {
-      document.getElementById('receiptTitle').value = config.receipt?.title || '';
-      document.getElementById('receiptFooter').value = config.receipt?.footer || '';
+  async function loadConfig() {
+    try {
+      const res = await fetch('/api/config');
+      config = await res.json();
+      renderAll();
+    } catch (e) {
+      showAlert('Gagal memuat konfigurasi', 'danger');
     }
+  }
 
-    async function saveReceiptSettings() {
-      const title = document.getElementById('receiptTitle').value;
-      const footer = document.getElementById('receiptFooter').value;
-      try {
-        const res = await fetch('/api/config', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ receipt: { title, footer } })
-        });
-        const data = await res.json();
-        if (data.success) {
-          config = data.config;
-          showAlert('Setting struk berhasil disimpan', 'success');
-        }
-      } catch (error) {
-        showAlert('Gagal simpan setting', 'danger');
-      }
+  function renderAll() {
+    renderDashboard();
+    renderMethods();
+    renderTelegram();
+    renderAutoToggle();
+    renderQris();
+  }
+
+  function renderDashboard() {
+    const methods = Object.keys(config.payment?.methods || {}).length;
+    document.getElementById('totalMethods').textContent = methods;
+
+    const auto = config.payment?.autoConfirm || false;
+    document.getElementById('statusMode').textContent = auto ? '✅ Otomatis' : '⏳ Manual';
+    document.getElementById('statusMode').className = auto ? 'badge badge-success' : 'badge badge-warning';
+
+    const qris = config.payment?.methods?.QRIS || '';
+    const qrisEl = document.getElementById('qrisStatus');
+    if (qris && qris !== 'tidak ada') {
+      qrisEl.textContent = '✅ Terupload';
+      qrisEl.className = 'badge badge-success';
+    } else {
+      qrisEl.textContent = '❌ Belum';
+      qrisEl.className = 'badge badge-danger';
     }
+  }
 
-    function renderTelegram() {
-      document.getElementById('botToken').value = config.telegram?.token || '';
-      document.getElementById('chatId').value = config.telegram?.chatId || '';
+  function renderAutoToggle() {
+    const auto = config.payment?.autoConfirm || false;
+    const toggle = document.getElementById('autoToggle');
+    const label = document.getElementById('autoLabel');
+    if (auto) {
+      toggle.classList.add('active');
+      label.textContent = 'Aktif';
+    } else {
+      toggle.classList.remove('active');
+      label.textContent = 'Nonaktif';
     }
+  }
 
-    async function saveTelegramSettings() {
-      const token = document.getElementById('botToken').value;
-      const chatId = document.getElementById('chatId').value;
-      try {
-        const res = await fetch('/api/config', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ telegram: { token, chatId } })
-        });
-        const data = await res.json();
-        if (data.success) {
-          config = data.config;
-          showAlert('Setting Telegram berhasil disimpan', 'success');
-        }
-      } catch (error) {
-        showAlert('Gagal simpan setting', 'danger');
-      }
-    }
-
-    async function testTelegram() {
-      const token = document.getElementById('botToken').value;
-      const chatId = document.getElementById('chatId').value;
-      if (!token || !chatId) {
-        showAlert('Isi token dan chat ID dulu!', 'danger');
-        return;
-      }
-      try {
-        const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: '✅ Test koneksi dari dashboard berhasil!'
-          })
-        });
-        const data = await res.json();
-        if (data.ok) {
-          showAlert('✅ Test berhasil! Pesan terkirim ke Telegram.', 'success');
-        } else {
-          showAlert('❌ Gagal: ' + data.description, 'danger');
-        }
-      } catch (error) {
-        showAlert('❌ Gagal koneksi ke Telegram', 'danger');
-      }
-    }
-
-    document.querySelectorAll('.sidebar-menu a').forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.querySelectorAll('.sidebar-menu a').forEach(l => l.classList.remove('active'));
-        this.classList.add('active');
-        
-        const page = this.dataset.page;
-        document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('hidden'));
-        document.getElementById(`page-${page}`).classList.remove('hidden');
-        
-        const titles = {
-          dashboard: ['Dashboard', 'Kelola konfigurasi payment system'],
-          payment: ['Payment Methods', 'Ubah nomor rekening / e-wallet'],
-          qris: ['QRIS Settings', 'Upload dan kelola QRIS'],
-          receipt: ['Receipt Settings', 'Setting tampilan struk pembayaran'],
-          telegram: ['Telegram Settings', 'Konfigurasi bot Telegram']
-        };
-        document.getElementById('pageTitle').textContent = titles[page][0];
-        document.getElementById('pageDesc').textContent = titles[page][1];
+  async function toggleAutoConfirm() {
+    const auto = !config.payment?.autoConfirm;
+    try {
+      const res = await fetch('/api/payment/auto-confirm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ enabled: auto })
       });
-    });
-
-    function showAlert(message, type = 'success') {
-      const container = document.getElementById('alertContainer');
-      const className = type === 'success' ? 'alert-success' : 'alert-danger';
-      container.innerHTML = `<div class="alert ${className}">${message}</div>`;
-      setTimeout(() => {
-        container.innerHTML = '';
-      }, 5000);
+      const data = await res.json();
+      if (data.success) {
+        config.payment.autoConfirm = data.autoConfirm;
+        renderAutoToggle();
+        renderDashboard();
+        showAlert(`Auto confirm ${data.autoConfirm ? 'diaktifkan' : 'dinonaktifkan'}`, 'success');
+      }
+    } catch (e) {
+      showAlert('Gagal mengubah setting', 'danger');
     }
+  }
 
-    loadConfig();
-  </script>
+  function renderMethods() {
+    const container = document.getElementById('methodList');
+    const methods = config.payment?.methods || {};
+    let html = '';
+    for (const [key, value] of Object.entries(methods)) {
+      if (key === 'QRIS') continue;
+      html += `
+        <div class="method-item">
+          <span class="name">${key}</span>
+          <input type="text" id="method_${key}" value="${value}">
+          <button class="btn btn-primary btn-sm" onclick="saveMethod('${key}')"><i class="fas fa-save"></i></button>
+        </div>
+      `;
+    }
+    container.innerHTML = html;
+  }
+
+  async function saveMethod(method) {
+    const input = document.getElementById(`method_${method}`);
+    const value = input.value.trim();
+    if (!value) {
+      showAlert('Nomor tidak boleh kosong', 'danger');
+      return;
+    }
+    try {
+      const res = await fetch('/api/payment/method', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ method, value })
+      });
+      const data = await res.json();
+      if (data.success) {
+        config = data.config;
+        showAlert(`${method} berhasil diupdate`, 'success');
+      }
+    } catch (e) {
+      showAlert('Gagal update method', 'danger');
+    }
+  }
+
+  function renderQris() {
+    const qris = config.payment?.methods?.QRIS || '';
+    const img = document.getElementById('currentQris');
+    if (qris && qris !== 'tidak ada') {
+      img.src = qris;
+      img.style.display = 'block';
+    } else {
+      img.style.display = 'none';
+    }
+  }
+
+  document.getElementById('qrisForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    try {
+      const res = await fetch('/api/upload/qris', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (data.success) {
+        config.payment.methods.QRIS = data.url;
+        renderQris();
+        renderDashboard();
+        showAlert('QRIS berhasil diupload!', 'success');
+      }
+    } catch (e) {
+      showAlert('Gagal upload QRIS', 'danger');
+    }
+  });
+
+  function renderTelegram() {
+    document.getElementById('botToken').value = config.telegram?.token || '';
+    document.getElementById('chatId').value = config.telegram?.chatId || '';
+  }
+
+  async function saveTelegram() {
+    const token = document.getElementById('botToken').value;
+    const chatId = document.getElementById('chatId').value;
+    try {
+      const res = await fetch('/api/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ telegram: { token, chatId } })
+      });
+      const data = await res.json();
+      if (data.success) {
+        config = data.config;
+        showAlert('Setting Telegram berhasil disimpan', 'success');
+      }
+    } catch (e) {
+      showAlert('Gagal simpan setting', 'danger');
+    }
+  }
+
+  async function testTelegram() {
+    const token = document.getElementById('botToken').value;
+    const chatId = document.getElementById('chatId').value;
+    if (!token || !chatId) {
+      showAlert('Isi token dan chat ID dulu!', 'danger');
+      return;
+    }
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: '✅ Test koneksi dari dashboard berhasil!'
+        })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        showAlert('✅ Test berhasil! Pesan terkirim ke Telegram.', 'success');
+      } else {
+        showAlert('❌ Gagal: ' + data.description, 'danger');
+      }
+    } catch (e) {
+      showAlert('❌ Gagal koneksi ke Telegram', 'danger');
+    }
+  }
+
+  function showAlert(message, type = 'success') {
+    const container = document.getElementById('alertContainer');
+    const className = type === 'success' ? 'alert-success' : type === 'danger' ? 'alert-danger' : 'alert-info';
+    container.innerHTML = `<div class="alert show ${className}">${message}</div>`;
+    setTimeout(() => {
+      container.innerHTML = '';
+    }, 5000);
+  }
+</script>
 </body>
 </html>
